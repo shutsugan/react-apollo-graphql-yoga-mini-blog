@@ -1,0 +1,33 @@
+scalar DateTime
+
+type Query {
+  posts: [Post!]!
+}
+
+type Mutation {
+  createPost(title: String!, article: String!, author: String!): Post!
+  signup(name: String!, email: String!, password: String!): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+}
+
+type Post {
+  id: ID!
+  title: String!
+  article: String!
+  art: String!
+  author: User!
+  createdAt: DateTime!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
+  posts: [Post!]!
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
