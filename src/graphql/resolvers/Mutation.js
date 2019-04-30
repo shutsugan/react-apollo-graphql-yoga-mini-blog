@@ -1,8 +1,9 @@
 import { signup, login } from './user';
-import { createPost } from './post';
+import { createPost, updatePost } from './post';
 
 export default {
   createPost,
+  updatePost,
   signup,
   login
 }
