@@ -12,7 +12,7 @@ const postSchema = Schema({
   },
   draft: {
     type: Boolean,
-    default: true
+    default: false
   },
   art: {
     type: String,
