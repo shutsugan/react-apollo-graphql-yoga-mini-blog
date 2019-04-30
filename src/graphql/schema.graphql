@@ -2,13 +2,14 @@ scalar DateTime
 
 type Query {
   posts: [Post!]!
-  users: [User!]!
   post(id: String!): Post!
+  users: [User!]!
   user(id: String!): User!
 }
 
 type Mutation {
-  createPost(title: String!, article: String!, art: String, author: String!): Post!
+  createPost(title: String!, article: String!, art: String, draft: Boolean, author: String!): Post!
+  updatePost(id: String!, title: String, article: String, art: String, draft: Boolean): Post!
   signup(name: String!, email: String!, password: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
 }
@@ -18,6 +19,7 @@ type Post {
   title: String!
   article: String!
   art: String
+  draft: Boolean
   author: User!
   createdAt: DateTime!
 }
