@@ -24,7 +24,10 @@ const userSchema = Schema({
     type: String,
     required: [true, 'Password is required']
   },
-  posts: [{type: Schema.Types.ObjectId, ref: 'Post'}]
+  posts: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Post'
+  }]
 }, { timestamps: { createdAt: 'createdAt' } });
 
 const User = mongoose.model('User', userSchema);
