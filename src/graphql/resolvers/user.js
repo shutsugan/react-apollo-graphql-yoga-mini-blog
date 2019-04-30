@@ -9,7 +9,7 @@ const users = async (_, __, { context }) => {
     .User
     .find()
     .populate('posts')
-    .sort({ name: 1});
+    .sort({ name: 1 });
 
   if (!users) throw new Error('Users do not exist');
 
@@ -30,26 +30,21 @@ const user = async (_, { id }, { context }) => {
 const signup = async (_, { name, email, password }, { context }) => {
   const pwd = await bcrypt.hash(password, 10);
 
-  const user = await context.models.User.findOne({email});
-  if (user) throw new Error('User already exists');
+  const userExists = await context.models.User.findOne({email});
+  if (userExists) throw new Error('User already exists');
 
-  const newUser = await context.models.User.create({
-    name,
-    email,
-    password: pwd
-  });
-
-  const token = jwt.sign({ userId: newUser.id }, APP_SECRET);
+  const user = await context.models.User.create({ name, email, password: pwd });
+  const token = jwt.sign({ userId: user.id }, APP_SECRET);
 
   try {
-    await newUser.save();
+    await user.save();
   } catch (err) {
-    throw new Error('Can not save the User!!');
+    throw new Error('Can not save the User');
   }
 
   return {
     token,
-    user: newUser
+    user
   };
 };
 
