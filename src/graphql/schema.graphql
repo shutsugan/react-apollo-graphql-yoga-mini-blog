@@ -10,6 +10,7 @@ type Query {
 type Mutation {
   createPost(title: String!, article: String!, art: String, draft: Boolean, author: String!): Post!
   updatePost(id: String!, title: String, article: String, art: String, draft: Boolean): Post!
+  deletePost(id: String!, archive: Boolean): Post!
   signup(name: String!, email: String!, password: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
 }
@@ -20,6 +21,7 @@ type Post {
   article: String!
   art: String
   draft: Boolean
+  archive: Boolean
   author: User!
   createdAt: DateTime!
 }
