@@ -14,6 +14,10 @@ const postSchema = Schema({
     type: Boolean,
     default: false
   },
+  archive: {
+    type: Boolean,
+    default: false
+  },
   art: {
     type: String,
     default: 'default.png'
