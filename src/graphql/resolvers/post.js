@@ -39,7 +39,7 @@ const createPost = async (_, { title, author, ...data }, { context }) => {
   }
 };
 
-const updatePost = async (_, {id, ...data}, { context }) => {
+const updatePost = async (_, { id, ...data }, { context }) => {
   try {
     const post = await context.models.Post.findByIdAndUpdate(id, { $set: data });
     const updatedPost = await context.models.Post.findById(id);
@@ -50,9 +50,15 @@ const updatePost = async (_, {id, ...data}, { context }) => {
   }
 };
 
+const deletePost = async (_, { id, archive }, { context }) => {
+  const args = {id, archive};
+  return updatePost(_, args, { context });
+}
+
 export {
   posts,
   post,
   createPost,
-  updatePost
+  updatePost,
+  deletePost
 };
