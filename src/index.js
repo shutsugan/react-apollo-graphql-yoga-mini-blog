@@ -9,7 +9,11 @@ const db = startDb({ url });
 const typeDefs = `${__dirname}/graphql/schema.graphql`;
 const resolvers = { Query, Mutation };
 const context = { models, db };
-const options = { port: 4000 };
+
+const options = { 
+  port: 4000,
+  cors: { origin: '*' }
+};
 
 const Server = new GraphQLServer({
   typeDefs,
