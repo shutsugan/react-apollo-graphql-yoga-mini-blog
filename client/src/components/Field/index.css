@@ -1,0 +1,30 @@
+.field__label,
+.field__label--required {
+    text-transform: capitalize;
+    color: var(--label);
+}
+
+.field__label--required::after {
+    content: '*';
+    color: var(--secondary);
+}
+
+.field__input {
+    border: solid .5px var(--border);
+    border-radius: var(--radius);
+    outline: none;
+    transition: border-color var(--duration) var(--transition);
+}
+
+.field__input:focus {
+    border-color: var(--main);
+}
+
+.field__input--error {
+  border: solid 1px var(--secondary);
+}
+
+.field__error {
+  right: 0;
+  color: var(--secondary);
+}
