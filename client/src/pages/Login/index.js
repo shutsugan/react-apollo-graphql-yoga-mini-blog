@@ -72,9 +72,9 @@ const Login = _ => {
                 </Mutation>
 
                 <PageSwitcher
-                    to={'/signup'}
-                    label={'Signup'}
-                    text={'If new user! '}
+                    to="/signup"
+                    label="Signup"
+                    text="If new user! "
                 />
             </div>
 
