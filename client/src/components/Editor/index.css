@@ -1,0 +1,13 @@
+.ql-toolbar,
+.ql-container {
+    border: solid .5px var(--border) !important;
+    border-radius: var(--radius) var(--radius) 0px 0px;
+    outline: none;
+    transition: border-color var(--duration) var(--transition);
+}
+
+.ql-container {
+    height: 150px;
+    border-top: none !important;
+    border-radius: 0px 0px var(--radius) var(--radius);
+}
