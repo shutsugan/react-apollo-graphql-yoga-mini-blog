@@ -1,4 +1,5 @@
 scalar DateTime
+scalar Upload
 
 type Query {
   posts: [Post!]!
@@ -8,8 +9,8 @@ type Query {
 }
 
 type Mutation {
-  createPost(title: String!, article: String!, art: String, draft: Boolean, author: String!): Post!
-  updatePost(id: String!, title: String, article: String, art: String, draft: Boolean): Post!
+  createPost(title: String!, article: String!, art: Upload, draft: Boolean, author: String!): Post!
+  updatePost(id: String!, title: String, article: String, art: Upload, draft: Boolean): Post!
   deletePost(id: String!, archive: Boolean): Post!
   signup(name: String!, email: String!, password: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!

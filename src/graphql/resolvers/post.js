@@ -1,7 +1,9 @@
+import processUpload from '../upload';
+
 const posts = async (_, __, { context }) => {
   const posts = await context.models
     .Post
-    .find()
+    .find({archive: false})
     .populate('author')
     .sort({ title: 1 });
 
@@ -21,12 +23,18 @@ const post = async (_, { id }, { context }) => {
   return post;
 };
 
-const createPost = async (_, { title, author, ...data }, { context }) => {
+const createPost = async (_, { title, author, art, ...data }, { context }) => {
   const post = await context.models.Post.findOne({ title });
   if (post) throw new Error('Please provide a unique title');
 
   try {
-    const newPost = new context.models.Post({ title, author, ...data });
+    const filename = await processUpload(art);
+    const newPost = new context.models.Post({
+      title,
+      author,
+      art: filename,
+      ...data
+    });
 
     await context.models
       .User

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './index.css';
 
@@ -15,11 +15,17 @@ const Field = ({
     const [value, setValue] = useState(val);
     const [error, setError] = useState('');
 
+    useEffect(_ => {setValue(val)}, [val]);
+
     const handleChange = ({target}) => {
-        const { value } = target;
+        let val;
+        const { value, files } = target;
+
+        if (type === 'file') val = files;
+        else val = value;
 
         setValue(value);
-        setter(value);
+        setter(val);
     };
 
     const handleValidation = ({target}) => {

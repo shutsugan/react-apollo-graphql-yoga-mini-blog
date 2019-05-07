@@ -17,3 +17,41 @@ export const POSTS_QUERY = gql`
         }
     }
 `;
+
+export const POST_QUERY = gql`
+    query getPost($id: String!) {
+        post(id: $id) {
+            id
+            title
+            article
+            art
+            draft
+            createdAt
+        }
+    }
+`;
+
+export const CREATE_POST_MUTATION = gql`
+    mutation CreatePostMutation($title: String!, $article: String!, $art: Upload, $draft: Boolean, $author: String!) {
+        createPost(title: $title, article: $article, art: $art, draft: $draft, author: $author) {
+            id
+        }
+    }
+`;
+
+export const UPDATE_POST_MUTATION = gql`
+    mutation UpdatePostMutation($id: String!, $title: String!, $article: String!, $art: Upload, $draft: Boolean) {
+        updatePost(id: $id, title: $title, article: $article, art: $art, draft: $draft) {
+            id
+            title
+        }
+    }
+`;
+
+export const DELETE_POST_MUTATION = gql`
+    mutation DeletePost_Mutation($id: String!, $archive: Boolean) {
+        deletePost(id: $id, archive: $archive) {
+            id
+        }
+    }
+`;

@@ -9,7 +9,7 @@ import Error from '../../components/Error';
 import { SIGNUP_MUTATION } from '../../queries/signup';
 import { goBack, setToken, getToken } from '../../utils';
 
-const Signup = _ => {
+const Signup = ({ history }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -19,13 +19,13 @@ const Signup = _ => {
         const { token } = data.signup;
         _saveUser(token);
 
-        goBack();
+        goBack(history, '/');
     };
 
     const _saveUser = token => setToken(token);
     const _displayError = error => setError(error[0].message);
 
-    if (getToken()) return goBack();
+    if (getToken()) return goBack(history, '/');
 
     return (
         <div className="login full-height flex flex-column center">

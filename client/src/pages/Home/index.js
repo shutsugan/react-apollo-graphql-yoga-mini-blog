@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Card from '../../components/Card';
+
 import { Query } from 'react-apollo';
 import { POSTS_QUERY } from '../../queries/post';
 
@@ -11,9 +13,11 @@ const Home = _ => {
                     if (loading) return <div>Loading...</div>;
                     if (error) return <div>Error</div>;
 
-                    const list = data.posts.map(post => <div key={post.id}>{post.title}</div>);
+                    const list = data.posts.map(post => (
+                        <Card key={post.id} post={post} />
+                    ));
 
-                    return <>{list}</>
+                    return <div className="grid pd-16">{list}</div>;
                 }
             }
         </Query>

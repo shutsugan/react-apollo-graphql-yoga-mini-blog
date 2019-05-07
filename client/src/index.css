@@ -22,6 +22,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
+  background: #fafafa;
 }
 
 code {
@@ -65,6 +66,12 @@ a {
   align-items: stretch;
 }
 
+.grid {
+  column-count: 3;
+  column-gap: 2;
+  padding: 16px;
+}
+
 .full {
   width: 100%;
 }
@@ -83,6 +90,14 @@ a {
 
 .pdt-16 {
   padding-top: 16px;
+}
+
+.pd-16-6 {
+  padding: 16px 6px;
+}
+
+.pd-6 {
+  padding: 6px
 }
 
 .pd-8 {
@@ -235,8 +250,26 @@ a {
   transition: opacity var(--duration) var(--transition);
 }
 
-@media only screen and (max-width: 615px) {
+@media screen and (max-width: 960px) {
+  .grid {
+    column-count: 2;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .grid {
+    column-count: 1;
+  }
+}
+
+@media screen and (max-width: 615px) {
   .half {
     width: 90%;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .grid {
+    column-count: 1;
   }
 }

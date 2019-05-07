@@ -1,4 +1,6 @@
 import { GraphQLServer } from 'graphql-yoga';
+import express from 'express';
+import { join } from 'path';
 
 import { url } from './config';
 import { startDb, models } from './db';
@@ -23,5 +25,7 @@ const Server = new GraphQLServer({
     context
   })
 });
+
+Server.express.use('/images', express.static(join(__dirname, 'uploads')));
 
 Server.start(options, _ => console.log(`Server running on ${options.port}`));

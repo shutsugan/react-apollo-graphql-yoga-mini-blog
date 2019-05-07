@@ -9,7 +9,7 @@ import PageSwitcher from '../../components/PageSwitcher';
 import { LOGIN_MUTATION } from '../../queries/login';
 import { goBack, setToken, getToken } from '../../utils';
 
-const Login = _ => {
+const Login = ({ history }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -19,13 +19,13 @@ const Login = _ => {
         const { token } = data.login;
         _saveUser(token);
         
-        goBack();
+        goBack(history, '/');
     };
     
     const _saveUser = token => setToken(token);
     const _displayError = error => setError(error[0].message);
 
-    if (getToken()) return goBack();
+    if (getToken()) return goBack(history, '/');
 
     return (
         <div className="login full-height flex flex-column center">
