@@ -18,14 +18,10 @@ const Field = ({
     useEffect(_ => {setValue(val)}, [val]);
 
     const handleChange = ({target}) => {
-        let val;
-        const { value, files } = target;
-
-        if (type === 'file') val = files;
-        else val = value;
+        const { value } = target;
 
         setValue(value);
-        setter(val);
+        setter(value);
     };
 
     const handleValidation = ({target}) => {
@@ -41,14 +37,14 @@ const Field = ({
     return (
         <div className="field flex flex-column start mrb-16 relative">
             <label className={`
-                field__label 
+                field__label
                 ${required ? 'field__label--required' : ''}
             `}>
                 {name}
             </label>
-            <input 
+            <input
                 className={`
-                    field__input full pd-16 
+                    field__input full pd-16
                     ${error ? 'field__input--error' : ''}
                 `}
                 name={name}
