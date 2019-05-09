@@ -5,7 +5,7 @@ import * as shortid from 'short-id';
 const storeUpload = (createReadStream, filename) => {
     const name = `${shortid.generate()}${filename}`
     const path = `${join(__dirname, '../uploads')}/${name}`;
-    
+
     return new Promise((resolve, reject) => {
         const stream = createReadStream();
         const writeStream = fs.createWriteStream(path);
@@ -17,6 +17,8 @@ const storeUpload = (createReadStream, filename) => {
 };
 
 const processUpload = async upload => {
+    if (typeof(upload) === 'string') return upload;
+
     const { createReadStream, filename } = await upload.pop();
     const { name } = await storeUpload(createReadStream, filename);
 
