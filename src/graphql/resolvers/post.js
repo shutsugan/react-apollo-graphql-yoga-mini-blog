@@ -3,9 +3,9 @@ import processUpload from '../upload';
 const posts = async (_, __, { context }) => {
   const posts = await context.models
     .Post
-    .find({archive: false})
+    .find({ archive: false }, null, { skip: 0 })
     .populate('author')
-    .sort({ title: 1 });
+    .sort({ createdAt: 1 });
 
   if (!posts) throw new Error('Posts do not exist');
 
@@ -47,13 +47,17 @@ const createPost = async (_, { title, author, art, ...data }, { context }) => {
   }
 };
 
-const updatePost = async (_, { id, ...data }, { context }) => {
+const updatePost = async (_, { id, art, ...data }, { context }) => {
   try {
-    const post = await context.models.Post.findByIdAndUpdate(id, { $set: data });
+    const filename = await processUpload(art);
+    const new_data = {...data, art: filename}
+
+    const post = await context.models.Post.findByIdAndUpdate(id, { $set: new_data });
     const updatedPost = await context.models.Post.findById(id);
 
     return updatedPost;
   } catch (err) {
+    console.log(err);
     throw new Error('Can not Update The Post');
   }
 };
