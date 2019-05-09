@@ -1,6 +1,8 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
+import Head from '../Head';
+
 import './index.css';
 
 const pages = ['Home', 'Signup', 'Login', 'CreatePost', 'UpdatePost'];
@@ -12,6 +14,7 @@ function App() {
   return (
     <div className="app">
       <BrowserRouter>
+        <Head />
         <Suspense fallback={<div>Loading...</div>}>
           <Switch>
             <Route exact path="/" component={_ => <Home />} />
