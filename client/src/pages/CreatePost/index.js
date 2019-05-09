@@ -3,12 +3,13 @@ import { Mutation } from 'react-apollo';
 
 import FormHead from '../../components/FormHead';
 import Field from '../../components/Field';
+import FileField from '../../components/FileField';
 import PageSwitcher from '../../components/PageSwitcher';
 import Switch from '../../components/Switch';
 import Editor from '../../components/Editor';
 import Error from '../../components/Error';
 
-import { CREATE_POST_MUTATION } from '../../queries/post';
+import { CREATE_POST_MUTATION, POSTS_QUERY } from '../../queries/post';
 import { getUserId, goBack } from '../../utils';
 
 const CreatePost = ({ history }) => {
@@ -23,7 +24,10 @@ const CreatePost = ({ history }) => {
     const { userId } = getUserId();
 
     const _confirm = _ => goBack(history, '/');
-    const _displayError = error => setError(error[0].message);
+    const _displayError = error => {
+      if (error) setError(error[0].message);
+      else setError('Something is wrong, try later');
+    };
 
     return (
         <div className="login full-height flex flex-column center">
@@ -48,10 +52,8 @@ const CreatePost = ({ history }) => {
                     setter={setArticle}
                 />
 
-                <Field
+                <FileField
                     name="art"
-                    type="file"
-                    val={art}
                     setter={setArt}
                 />
 
@@ -66,7 +68,13 @@ const CreatePost = ({ history }) => {
                     mutation={CREATE_POST_MUTATION}
                     variables={{ title, article, art, draft, author: userId }}
                     onCompleted={_confirm}
-                    onError={({ graphQLErrors }) => _displayError(graphQLErrors)}>
+                    onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
+                    update={(store, { data: { createPost } }) => {
+                      const data = store.readQuery({ query: POSTS_QUERY });
+
+                      data.posts.unshift(createPost);
+                      store.writeQuery({ query: POSTS_QUERY, data });
+                    }}>
                     {
                         mutation => (
                             <button

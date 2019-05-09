@@ -3,12 +3,13 @@ import { Mutation, withApollo } from 'react-apollo';
 
 import FormHead from '../../components/FormHead';
 import Field from '../../components/Field';
+import FileField from '../../components/FileField';
 import PageSwitcher from '../../components/PageSwitcher';
 import Switch from '../../components/Switch';
 import Editor from '../../components/Editor';
 import Error from '../../components/Error';
 
-import { POST_QUERY, UPDATE_POST_MUTATION } from '../../queries/post';
+import { POST_QUERY, POSTS_QUERY, UPDATE_POST_MUTATION } from '../../queries/post';
 import { getUserId, goBack } from '../../utils';
 
 const UpdatePost = ({ history, match, client }) => {
@@ -25,22 +26,26 @@ const UpdatePost = ({ history, match, client }) => {
                 query: POST_QUERY,
                 variables: { id }
             });
-            
+
             const { post } = await result.data;
             setTitle(post.title);
             setArticle(post.article);
             setDraft(post.draft);
-            
+            setArt(post.art);
+
             return post;
         };
-    
+
         _getPost();
     }, [id, match, client]);
 
     if (!getUserId()) return goBack(history, '/');
 
     const _confirm = _ => goBack(history, '/');
-    const _displayError = error => setError(error[0].message);
+    const _displayError = error => {
+      if (error) setError(error[0].message);
+      else setError('Something is wrong, try later');
+    };
 
     return (
         <div className="login full-height flex flex-column center">
@@ -66,10 +71,8 @@ const UpdatePost = ({ history, match, client }) => {
                     setter={setArticle}
                 />
 
-                <Field
+                <FileField
                     name="art"
-                    type="file"
-                    val={art}
                     setter={setArt}
                 />
 
@@ -84,7 +87,22 @@ const UpdatePost = ({ history, match, client }) => {
                     mutation={UPDATE_POST_MUTATION}
                     variables={{ id, title, article, art, draft }}
                     onCompleted={_confirm}
-                    onError={({ graphQLErrors }) => _displayError(graphQLErrors)}>
+                    onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
+                    update={(store, { data: { updatePost } }) => {
+                      const data = store.readQuery({ query: POSTS_QUERY });
+
+                      const posts = data.posts.map(post => {
+                        if (post.id === id) return updatePost;
+                        else return post;
+                      });
+
+                      const updatedData = { posts };
+
+                      store.writeQuery({
+                        query: POSTS_QUERY,
+                        updatedData
+                      });
+                    }}>
                     {
                         mutation => (
                             <button
