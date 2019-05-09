@@ -15,7 +15,7 @@ const Editor = ({ name, required, val, setter }) => {
         setValue(value);
         setter(value);
     };
-    
+
     const handleValidation = _ => {
         let message = '';
         if (required && !value) message = `Field is required`;
@@ -27,7 +27,7 @@ const Editor = ({ name, required, val, setter }) => {
         toolbar: [
             ['bold', 'italic', 'underline','strike', 'blockquote'],
             [{'list': 'ordered'}, {'list': 'bullet'}],
-            
+
             [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
             [{ 'color': [] }, { 'background': [] }],
             [{ 'font': [] }],
@@ -40,14 +40,13 @@ const Editor = ({ name, required, val, setter }) => {
     return (
         <div className="full flex flex-column start mrb-16 relative">
             <label className={`
-                field__label 
+                field__label
                 ${required ? 'field__label--required' : ''}
             `}>
                 {name}
             </label>
             <ReactQuill
                 className="full editor"
-                value={value}
                 modules={modules}
                 onChange={handleChange}
                 onBlur={handleValidation}
