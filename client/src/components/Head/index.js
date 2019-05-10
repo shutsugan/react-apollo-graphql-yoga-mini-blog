@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import { getUserId, removeToken } from '../../utils';
 
-const Head = _ => (
+const Head = ({ history }) => (
   <div className="head flex space-between full pd-16">
     <div className="head__left flex center">
       <Link className="link mrr-16" to="/">Home</Link>
@@ -15,7 +15,9 @@ const Head = _ => (
     <div className="head__right">
       {
         getUserId() &&
-        <div className="link" onClick={_ => removeToken()}>Logout</div>
+        <div className="link" onClick={_ => removeToken(history, '/')}>
+          Logout
+        </div>
       }
       {
         !getUserId() && [
@@ -27,4 +29,4 @@ const Head = _ => (
   </div>
 );
 
-export default Head;
+export default withRouter(Head);
