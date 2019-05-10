@@ -91,17 +91,10 @@ const UpdatePost = ({ history, match, client }) => {
                     update={(store, { data: { updatePost } }) => {
                       const data = store.readQuery({ query: POSTS_QUERY });
 
-                      const posts = data.posts.map(post => {
-                        if (post.id === id) return updatePost;
-                        else return post;
-                      });
+                      const position = data.posts.indexOf(updatePost);
+                      data.posts.splice(position, 1, updatePost);
 
-                      const updatedData = { posts };
-
-                      store.writeQuery({
-                        query: POSTS_QUERY,
-                        updatedData
-                      });
+                      store.writeQuery({ query: POSTS_QUERY, data });
                     }}>
                     {
                         mutation => (
