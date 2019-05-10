@@ -178,6 +178,7 @@ a {
   text-decoration: none;
   color: var(--secondary);
   transition: color var(--duration) var(--transition);
+  cursor: pointer; 
 }
 
 .link:hover {
