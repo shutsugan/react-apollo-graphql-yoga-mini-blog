@@ -89,12 +89,23 @@ const UpdatePost = ({ history, match, client }) => {
                     onCompleted={_confirm}
                     onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
                     update={(store, { data: { updatePost } }) => {
-                      const data = store.readQuery({ query: POSTS_QUERY });
+                      const data = store.readQuery({
+                        query: POSTS_QUERY,
+                        variables: { skip: 0 }
+                      });
 
-                      const position = data.posts.indexOf(updatePost);
-                      data.posts.splice(position, 1, updatePost);
+                      const posts = data.feed.posts;
+                      const postIds = posts.map(post => post.id);
+                      const position = postIds.indexOf(updatePost.id);
 
-                      store.writeQuery({ query: POSTS_QUERY, data });
+                      if (updatePost.draft) posts.splice(position, 1, updatePost);
+                      else posts.splice(position, 1);
+
+                      store.writeQuery({
+                        query: POSTS_QUERY,
+                        data,
+                        variables: { skip: 0 }
+                      });
                     }}>
                     {
                         mutation => (
