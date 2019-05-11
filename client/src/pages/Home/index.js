@@ -7,13 +7,13 @@ import { POSTS_QUERY } from '../../queries/post';
 
 const Home = _ => {
     return (
-        <Query query={POSTS_QUERY}>
+        <Query query={POSTS_QUERY} variables={{ skip: 0 }}>
             {
                 ({ loading, error, data, subscribeToMore }) => {
                     if (loading) return <div>Loading...</div>;
                     if (error) return <div>Error</div>;
 
-                    const list = data.posts.map(post => (
+                    const list = data.feed.posts.map(post => (
                         <Card key={post.id} post={post} />
                     ));
 
