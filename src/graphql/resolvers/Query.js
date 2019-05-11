@@ -1,8 +1,8 @@
-import { posts, post } from './post';
+import { feed, post } from './post';
 import { users, user } from './user';
 
 export default {
-  posts,
+  feed,
   post,
   users,
   user
