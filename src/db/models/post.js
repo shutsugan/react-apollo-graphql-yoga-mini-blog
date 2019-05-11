@@ -28,7 +28,5 @@ const postSchema = Schema({
   }
 }, { timestamps: { createdAt: 'createdAt' } });
 
-
-
 const Post = mongoose.model('Post', postSchema);
 export default Post;
