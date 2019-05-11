@@ -2,7 +2,7 @@ scalar DateTime
 scalar Upload
 
 type Query {
-  posts: [Post!]!
+  feed (skip: Int): Feed!
   post(id: String!): Post!
   users: [User!]!
   user(id: String!): User!
@@ -38,4 +38,9 @@ type User {
 type AuthPayload {
   token: String
   user: User
+}
+
+type Feed {
+  posts: [Post!]!
+  count: Int!
 }
