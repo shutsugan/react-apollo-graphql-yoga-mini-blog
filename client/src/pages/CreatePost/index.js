@@ -70,10 +70,18 @@ const CreatePost = ({ history }) => {
                     onCompleted={_confirm}
                     onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
                     update={(store, { data: { createPost } }) => {
-                      const data = store.readQuery({ query: POSTS_QUERY });
-
-                      data.posts.unshift(createPost);
-                      store.writeQuery({ query: POSTS_QUERY, data });
+                      const data = store.readQuery({
+                        query: POSTS_QUERY,
+                        variables: { skip: 0 }
+                      });
+                      
+                      console.log(data);
+                      data.feed.posts.unshift(createPost);
+                      store.writeQuery({
+                        query: POSTS_QUERY,
+                        data,
+                        variables: { skip: 0 }
+                      });
                     }}>
                     {
                         mutation => (
