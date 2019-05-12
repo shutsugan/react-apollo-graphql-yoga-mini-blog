@@ -178,7 +178,7 @@ a {
   text-decoration: none;
   color: var(--secondary);
   transition: color var(--duration) var(--transition);
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .link:hover {
@@ -226,6 +226,12 @@ a {
 
 .white {
   color: #fff;
+}
+
+.icon {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
 }
 
 .fade-appear {

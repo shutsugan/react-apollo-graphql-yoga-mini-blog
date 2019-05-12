@@ -4,7 +4,6 @@
 }
 
 .card__art {
-    min-height: 172px;
     height: auto;
     object-fit: cover;
     overflow: hidden;

@@ -89,9 +89,10 @@ const UpdatePost = ({ history, match, client }) => {
                     onCompleted={_confirm}
                     onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
                     update={(store, { data: { updatePost } }) => {
+                      const variables = { skip: 0, limit: 10, published: true };
                       const data = store.readQuery({
                         query: POSTS_QUERY,
-                        variables: { skip: 0 }
+                        variables
                       });
 
                       const posts = data.feed.posts;
@@ -104,7 +105,7 @@ const UpdatePost = ({ history, match, client }) => {
                       store.writeQuery({
                         query: POSTS_QUERY,
                         data,
-                        variables: { skip: 0 }
+                        variables
                       });
                     }}>
                     {

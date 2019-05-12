@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const POSTS_QUERY = gql`
-    query getPosts($skip: Int) {
-        feed(skip: $skip) {
+    query getPosts($skip: Int, $limit: Int, $published: Boolean) {
+        feed(skip: $skip, limit: $limit, published: $published) {
             posts {
                 id
                 title

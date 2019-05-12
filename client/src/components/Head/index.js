@@ -8,8 +8,10 @@ const Head = ({ history }) => (
     <div className="head__left flex center">
       <Link className="link mrr-16" to="/">Home</Link>
       {
-        getUserId() &&
-        <Link className="link mrr-16" to="/create">Add Post</Link>
+        getUserId() && [
+          <Link key="add" className="link mrr-16" to="/create">Add Post</Link>,
+          <Link key="manage" className="link mrr-16" to="/manage">Manage Posts</Link>
+        ]
       }
     </div>
     <div className="head__right">

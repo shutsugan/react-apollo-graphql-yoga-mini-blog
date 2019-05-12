@@ -1,19 +1,17 @@
 import processUpload from '../upload';
 
-const limit = 10;
-const postsOptions = { archive: false, draft: true };
+const feed = async (_, { skip = 0, limit = 10, published = true }, { context }) => {
+  const options = { archive: false, draft: published };
 
-const feed = async (_, { skip = 0 }, { context }) => {
   const posts = await context.models
     .Post
-    .find(postsOptions, null, { skip, limit })
+    .find(options, null, { skip, limit })
     .populate('author')
     .sort({ createdAt: 1 });
 
   const count = await context.models
     .Post
-    .countDocuments(postsOptions);
-  console.log(count);
+    .countDocuments(options);
 
   if (!posts) throw new Error('Posts do not exist');
 
@@ -74,8 +72,11 @@ const updatePost = async (_, { id, art, ...data }, { context }) => {
 };
 
 const deletePost = async (_, { id, archive }, { context }) => {
-  const args = {id, archive};
-  return updatePost(_, args, { context });
+  const data = { archive };
+  const post = await context.models.Post.findByIdAndUpdate(id, { $set: data });
+  const deletedPost = await context.models.Post.findById(id);
+
+  return deletedPost;
 }
 
 export {

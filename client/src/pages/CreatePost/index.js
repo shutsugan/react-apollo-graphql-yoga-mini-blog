@@ -70,17 +70,17 @@ const CreatePost = ({ history }) => {
                     onCompleted={_confirm}
                     onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
                     update={(store, { data: { createPost } }) => {
+                      const variables = { skip: 0, limit: 10, published: true };
                       const data = store.readQuery({
                         query: POSTS_QUERY,
-                        variables: { skip: 0 }
+                        variables
                       });
-                      
-                      console.log(data);
+
                       data.feed.posts.unshift(createPost);
                       store.writeQuery({
                         query: POSTS_QUERY,
                         data,
-                        variables: { skip: 0 }
+                        variables
                       });
                     }}>
                     {

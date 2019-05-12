@@ -2,7 +2,7 @@ scalar DateTime
 scalar Upload
 
 type Query {
-  feed (skip: Int): Feed!
+  feed(skip: Int, limit: Int, published: Boolean): Feed!
   post(id: String!): Post!
   users: [User!]!
   user(id: String!): User!
