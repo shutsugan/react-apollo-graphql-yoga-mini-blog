@@ -7,10 +7,12 @@ import { startDb, models } from './db';
 
 import Query from './graphql/resolvers/Query';
 import Mutation from './graphql/resolvers/Mutation';
+import User from './graphql/resolvers/User';
+import Post from './graphql/resolvers/Post';
 
 const db = startDb({ url });
 const typeDefs = `${__dirname}/graphql/schema.graphql`;
-const resolvers = { Query, Mutation };
+const resolvers = { Query, Mutation, User, Post };
 const context = { models, db };
 
 const options = {
