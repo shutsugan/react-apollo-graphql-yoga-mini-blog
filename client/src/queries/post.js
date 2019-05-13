@@ -43,6 +43,11 @@ export const CREATE_POST_MUTATION = gql`
             art
             draft
             createdAt
+            author {
+                id
+                name
+                email
+            }
         }
     }
 `;
@@ -56,6 +61,11 @@ export const UPDATE_POST_MUTATION = gql`
             art
             draft
             createdAt
+            author {
+                id
+                name
+                email
+            }
         }
     }
 `;
