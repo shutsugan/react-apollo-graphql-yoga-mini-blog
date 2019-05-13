@@ -5,7 +5,7 @@ import { APP_SECRET } from '../../config';
 import { getUserId } from '../../utils';
 
 const users = async (_, __, { context }) => {
-  const users = context.models
+  const users = await context.models
     .User
     .find()
     .populate('posts')
@@ -17,7 +17,7 @@ const users = async (_, __, { context }) => {
 };
 
 const user = async (_, { id }, { context }) => {
-  const user = context.models
+  const user = await context.models
     .User
     .findById(id)
     .populate('posts');
