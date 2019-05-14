@@ -12,6 +12,7 @@ type Mutation {
   createPost(title: String!, article: String!, art: Upload, draft: Boolean, author: String!): Post!
   updatePost(id: String!, title: String, article: String, art: Upload, draft: Boolean): Post!
   deletePost(id: String!, archive: Boolean): Post!
+  vote(post: ID!, author: ID!): Vote!
   signup(name: String!, email: String!, password: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
 }
@@ -25,6 +26,7 @@ type Post {
   archive: Boolean
   author: User!
   createdAt: DateTime!
+  votes: [Vote!]!
 }
 
 type User {
@@ -43,4 +45,10 @@ type AuthPayload {
 type Feed {
   posts: [Post!]!
   count: Int!
+}
+
+type Vote {
+  id: ID!
+  post: Post!
+  author: User!
 }
