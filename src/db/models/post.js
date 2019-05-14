@@ -25,6 +25,10 @@ const postSchema = Schema({
   author: {
     type: Schema.Types.ObjectId,
     ref: 'User'
+  },
+  votes: {
+    type: Schema.Types.ObjectId,
+    ref: 'Vote'
   }
 }, { timestamps: { createdAt: 'createdAt' } });
 
