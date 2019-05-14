@@ -9,10 +9,11 @@ import Query from './graphql/resolvers/Query';
 import Mutation from './graphql/resolvers/Mutation';
 import User from './graphql/resolvers/User';
 import Post from './graphql/resolvers/Post';
+import Vote from './graphql/resolvers/Vote';
 
 const db = startDb({ url });
 const typeDefs = `${__dirname}/graphql/schema.graphql`;
-const resolvers = { Query, Mutation, User, Post };
+const resolvers = { Query, Mutation, User, Post, Vote };
 const context = { models, db };
 
 const options = {
