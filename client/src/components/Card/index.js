@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mutation } from 'react-apollo';
 
 import { DELETE_POST_MUTATION } from '../../queries/post';
+import { VOTE_MUTATION } from '../../queries/vote';
 import { getUserId } from '../../utils';
 
 import Modal from '../../components/Modal';
@@ -29,7 +30,9 @@ const Card = ({ post }) => {
         mutation();
     };
 
-    const _displayError = error => setError(error[0].message);
+    const _voted = data => console.log('=>', data);
+
+    const _displayError = error => console.dir(error);
 
     return (
         <div className="card flex flex-column mrb-16">
@@ -70,6 +73,21 @@ const Card = ({ post }) => {
                   onClick={_ => setModal(post)}>
                   Read More
                 </button>
+
+                <Mutation
+                  mutation={VOTE_MUTATION}
+                  variables={{ post: post.id, author: getUserId().userId }}
+                  onCompleted={_voted}
+                  onError={({ graphQLErrors }) => _displayError(graphQLErrors)}>
+                  {
+                    mutation => (
+                      getUserId() &&
+                      <button
+                        className="button"
+                        onClick={mutation}>Like</button>
+                    )
+                  }
+                </Mutation>
             </div>
 
             {modal && <Modal post={modal} setter={setModal} />}
