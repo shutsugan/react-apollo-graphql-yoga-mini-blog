@@ -1,3 +1,4 @@
+import { vote } from './vote';
 import { signup, login } from './user';
 import {
   createPost,
@@ -9,6 +10,7 @@ export default {
   createPost,
   updatePost,
   deletePost,
+  vote,
   signup,
   login
 }
