@@ -4,7 +4,7 @@ const posts = async ({ id }, _, { context }) => {
     .find({ id })
     .populate('posts');
 
-  if (!posts) throw new Error('No posts found');
+  if (!user) throw new Error('No posts found');
 
   return user.posts;
 };
