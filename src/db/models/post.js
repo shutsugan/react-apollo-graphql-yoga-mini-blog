@@ -26,10 +26,10 @@ const postSchema = Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
-  votes: {
+  votes: [{
     type: Schema.Types.ObjectId,
     ref: 'Vote'
-  }
+  }]
 }, { timestamps: { createdAt: 'createdAt' } });
 
 const Post = mongoose.model('Post', postSchema);
