@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mutation } from 'react-apollo';
 
 import { DELETE_POST_MUTATION } from '../../queries/post';
@@ -8,11 +8,36 @@ import { getUserId } from '../../utils';
 import Modal from '../../components/Modal';
 import Error from '../../components/Error';
 
+import heartOutline from '../../icons/heartOutline.svg';
+import heartFilled from '../../icons/heartFilled.svg';
+
 import './index.css';
 
-const Card = ({ post }) => {
+const Card = ({ post, client }) => {
     const [error, setError] = useState('');
     const [modal, setModal] = useState('');
+    const [like, setLike] = useState(false);
+
+    useEffect(_ => {
+      const _isLiked = _ => {
+        let liked = false;
+        post.votes.forEach(vote => {
+          if (vote.author.id === getUserId().userId) return liked = true;
+        });
+
+        setLike(liked);
+      };
+
+      _isLiked();
+    }, [post]);
+
+    //TODO: implement Optimistic UI
+
+    const _like = mutation => {
+      mutation();
+
+      setLike(true);
+    }
 
     const _articlePreview = article => {
         return article && `${article.substring(0, 200)}`;
@@ -32,7 +57,7 @@ const Card = ({ post }) => {
 
     const _voted = data => console.log('=>', data);
 
-    const _displayError = error => console.dir(error);
+    const _displayError = error => setError('Something went wrong');
 
     return (
         <div className="card flex flex-column mrb-16">
@@ -60,14 +85,14 @@ const Card = ({ post }) => {
                 </Mutation>
 
             </div>
-            <h2 className="card__title pd-6 mr-none">
+            <h2 className="card__title pd-6-16 pdt-16 mr-none">
                 {post.title}
             </h2>
             <div
-                className="card__article pd-6"
+                className="card__article pd-6-16 pdb-16"
                 dangerouslySetInnerHTML={{__html: _articlePreview(post.article)}}>
             </div>
-            <div className="card__footer pd-16-6">
+            <div className="card__footer flex space-between pd-16">
                 <button
                   className="button card__read-more pd-16"
                   onClick={_ => setModal(post)}>
@@ -81,13 +106,23 @@ const Card = ({ post }) => {
                   onError={({ graphQLErrors }) => _displayError(graphQLErrors)}>
                   {
                     mutation => (
-                      getUserId() &&
-                      <button
-                        className="button"
-                        onClick={mutation}>Like</button>
+                      getUserId() && !like &&
+                      <img
+                        className="icon icon__like"
+                        onClick={_ => _like(mutation)}
+                        src={heartOutline} alt="unliked post"
+                      />
                     )
                   }
                 </Mutation>
+
+                {
+                  getUserId() && like &&
+                  <img
+                    className="icon icon__like"
+                    src={heartFilled} alt="liked post"
+                  />
+                }
             </div>
 
             {modal && <Modal post={modal} setter={setModal} />}
