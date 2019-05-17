@@ -15,6 +15,11 @@ export const POSTS_QUERY = gql`
                     name
                     email
                 }
+                votes {
+                  author {
+                    id
+                  }
+                }
             }
             count
         }
