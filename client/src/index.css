@@ -96,6 +96,18 @@ a {
   padding: 16px 6px;
 }
 
+.pd-6-16 {
+  padding: 6px 16px;
+}
+
+.pdt-16 {
+  padding-top: 16px;
+}
+
+.pdb-16 {
+  padding-bottom: 16px;
+}
+
 .pd-6 {
   padding: 6px
 }
@@ -232,6 +244,15 @@ a {
   width: 35px;
   height: 35px;
   cursor: pointer;
+}
+
+.icon__like {
+  opacity: .7;
+  transition: opacity .15s;
+}
+
+.icon__like:hover {
+  opacity: 1;
 }
 
 .fade-appear {
