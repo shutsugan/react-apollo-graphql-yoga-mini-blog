@@ -1,7 +1,7 @@
 const post = async ({ id }, _, { context }) => {
   const vote = await context.models
     .Vote
-    .find({ id })
+    .findById(id)
     .populate('post');
 
     if (!vote) throw new Error('No vote found');
@@ -12,7 +12,7 @@ const post = async ({ id }, _, { context }) => {
 const author = async ({ id }, _, { context }) => {
   const vote = await context.models
     .Vote
-    .find({ id })
+    .findById(id)
     .populate('author');
 
     if (!vote) throw new Error('No author found');

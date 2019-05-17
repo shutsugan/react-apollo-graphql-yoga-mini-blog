@@ -14,9 +14,6 @@ const votes = async ({ id }, _, { context }) => {
     .Post.findById(id)
     .populate('votes');
 
-    console.log(post);
-    //TODO: finished the vote resolver
-
     if (!post) throw new Error('No votes found');
 
     return post.votes;

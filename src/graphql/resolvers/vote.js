@@ -1,4 +1,4 @@
-const vote = async (_, { post, author }, { context }) => {
+const createVote = async (_, { post, author }, { context }) => {
   const vote = await context.models.Vote.findOne({ post, author });
   if (vote) throw new Error(`Already voted for post ${vote}`);
 
@@ -19,4 +19,13 @@ const vote = async (_, { post, author }, { context }) => {
   }
 };
 
-export { vote };
+const votes = async (_, { post, author }, { context }) => {
+  const theVote = await context.models
+    .Vote
+    .find({ post, author })
+    .populate('post', 'author');
+
+  return theVote;
+};
+
+export { createVote, votes };
