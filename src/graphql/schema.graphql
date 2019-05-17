@@ -4,6 +4,7 @@ scalar Upload
 type Query {
   feed(skip: Int, limit: Int, published: Boolean): Feed!
   post(id: String!): Post!
+  votes(post: String!, author: String!): [Vote!]!
   users: [User!]!
   user(id: String!): User!
 }
@@ -12,7 +13,7 @@ type Mutation {
   createPost(title: String!, article: String!, art: Upload, draft: Boolean, author: String!): Post!
   updatePost(id: String!, title: String, article: String, art: Upload, draft: Boolean): Post!
   deletePost(id: String!, archive: Boolean): Post!
-  vote(post: ID!, author: ID!): Vote!
+  createVote(post: String!, author: String!): Vote!
   signup(name: String!, email: String!, password: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
 }
