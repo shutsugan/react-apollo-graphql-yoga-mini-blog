@@ -19,6 +19,23 @@ const createVote = async (_, { post, author }, { context }) => {
   }
 };
 
+const deleteVote = async (_, { post, author }, { context }) => {
+  const vote = await context.models.Vote.findOne({ post, author });
+  if (!vote) throw new Error(`Not voted on this post`);
+
+  try {
+    await context.models.Vote.deleteOne({ post, author });
+
+    await context.models
+      .Post
+      .updateOne({ _id: post }, { $pull: { votes: vote._id } });
+
+    return vote;
+  } catch (err) {
+    throw new Error('Can not delete this vote');
+  }
+};
+
 const votes = async (_, { post, author }, { context }) => {
   const theVote = await context.models
     .Vote
@@ -28,4 +45,8 @@ const votes = async (_, { post, author }, { context }) => {
   return theVote;
 };
 
-export { createVote, votes };
+export {
+  createVote,
+  deleteVote,
+  votes
+};
