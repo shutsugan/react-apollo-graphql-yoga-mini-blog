@@ -32,3 +32,11 @@ export const VOTE_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_VOTE_MUTATION = gql`
+  mutation DeleteVoteMutation($post: String!, $author: String!) {
+    deleteVote(post: $post, author: $author) {
+      id
+    }
+  }
+`;
