@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Mutation } from 'react-apollo';
 
 import { DELETE_POST_MUTATION } from '../../queries/post';
-import { VOTE_MUTATION } from '../../queries/vote';
+import { VOTE_MUTATION, DELETE_VOTE_MUTATION } from '../../queries/vote';
 import { getUserId } from '../../utils';
 
 import Modal from '../../components/Modal';
@@ -13,7 +13,7 @@ import heartFilled from '../../icons/heartFilled.svg';
 
 import './index.css';
 
-const Card = ({ post, client }) => {
+const Card = ({ post }) => {
     const [error, setError] = useState('');
     const [modal, setModal] = useState('');
     const [like, setLike] = useState(false);
@@ -32,11 +32,12 @@ const Card = ({ post, client }) => {
     }, [post]);
 
     //TODO: implement Optimistic UI
+    //TODO: update vote cache on mutation
 
-    const _like = mutation => {
+    const _toggleLike = (like, mutation) => {
       mutation();
 
-      setLike(true);
+      setLike(like);
     }
 
     const _articlePreview = article => {
@@ -109,20 +110,29 @@ const Card = ({ post, client }) => {
                       getUserId() && !like &&
                       <img
                         className="icon icon__like"
-                        onClick={_ => _like(mutation)}
+                        onClick={_ => _toggleLike(true, mutation)}
                         src={heartOutline} alt="unliked post"
                       />
                     )
                   }
                 </Mutation>
 
-                {
-                  getUserId() && like &&
-                  <img
-                    className="icon icon__like"
-                    src={heartFilled} alt="liked post"
-                  />
-                }
+                <Mutation
+                  mutation={DELETE_VOTE_MUTATION}
+                  variables={{ post: post.id, author: getUserId().userId }}
+                  onCompleted={_voted}
+                  onError={({ graphQLErrors }) => _displayError(graphQLErrors)}>
+                  {
+                    mutation => (
+                      getUserId() && like &&
+                      <img
+                        className="icon icon__like"
+                        onClick={_ => _toggleLike(false, mutation)}
+                        src={heartFilled} alt="liked post"
+                      />
+                    )
+                  }
+                </Mutation>
             </div>
 
             {modal && <Modal post={modal} setter={setModal} />}
