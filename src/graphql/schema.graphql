@@ -14,6 +14,7 @@ type Mutation {
   updatePost(id: String!, title: String, article: String, art: Upload, draft: Boolean): Post!
   deletePost(id: String!, archive: Boolean): Post!
   createVote(post: String!, author: String!): Vote!
+  deleteVote(post: String!, author: String!): Vote!
   signup(name: String!, email: String!, password: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
 }
