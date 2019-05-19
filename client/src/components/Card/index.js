@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Mutation } from 'react-apollo';
 
-import { DELETE_POST_MUTATION } from '../../queries/post';
+import { DELETE_POST_MUTATION, POSTS_QUERY } from '../../queries/post';
 import { VOTE_MUTATION, DELETE_VOTE_MUTATION } from '../../queries/vote';
 import { getUserId } from '../../utils';
 
@@ -30,6 +30,8 @@ const Card = ({ post }) => {
 
       _isLiked();
     }, [post]);
+
+    //TODO: implement Optimistic UI
 
     const _toggleLike = (like, mutation) => {
       mutation();
@@ -69,7 +71,23 @@ const Card = ({ post }) => {
                     mutation={DELETE_POST_MUTATION}
                     variables={{ id: post.id, archive: true }}
                     onCompleted={_deleted}
-                    onError={({ graphQLErrors }) => _displayError(graphQLErrors)}>
+                    onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
+                    update={(store, { data: { deletePost } }) => {
+                      const variables = { skip: 0, limit: 10, published: true };
+                      const data = store.readQuery({
+                        query: POSTS_QUERY,
+                        variables
+                      });
+
+                      const posts = data.feed.posts;
+                      data.feed.posts = posts.filter(post => post.id !== deletePost.id);
+
+                      store.writeQuery({
+                        query: POSTS_QUERY,
+                        data,
+                        variables
+                      });
+                    }}>
                     {
                         mutation => (
                             getUserId() &&
@@ -101,7 +119,27 @@ const Card = ({ post }) => {
                   mutation={VOTE_MUTATION}
                   variables={{ post: post.id, author: getUserId().userId }}
                   onCompleted={_voted}
-                  onError={({ graphQLErrors }) => _displayError(graphQLErrors)}>
+                  onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
+                  update={(store, {data: { createVote } }) => {
+                    const variables = { skip: 0, limit: 10, published: true };
+                    const data = store.readQuery({
+                      query: POSTS_QUERY,
+                      variables
+                    });
+
+                    const { id } = createVote;
+                    const posts = data.feed.posts;
+                    data.feed.posts = posts.map(item => {
+                      if (item.id === post.id) item.votes = [id];
+                      return item;
+                    });
+
+                    store.writeQuery({
+                      query: POSTS_QUERY,
+                      data,
+                      variables
+                    });
+                  }}>
                   {
                     mutation => (
                       getUserId() && !like &&
@@ -118,7 +156,26 @@ const Card = ({ post }) => {
                   mutation={DELETE_VOTE_MUTATION}
                   variables={{ post: post.id, author: getUserId().userId }}
                   onCompleted={_voted}
-                  onError={({ graphQLErrors }) => _displayError(graphQLErrors)}>
+                  onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
+                  update={(store, { data: { deleteVote } }) => {
+                    const variables = { skip: 0, limit: 10, published: true };
+                    const data = store.readQuery({
+                      query: POSTS_QUERY,
+                      variables
+                    });
+
+                    const posts = data.feed.posts;
+                    data.feed.posts = posts.map(item => {
+                      if (item.id === post.id) item.votes = [];
+                      return item;
+                    });
+
+                    store.writeQuery({
+                      query: POSTS_QUERY,
+                      data,
+                      variables
+                    });
+                  }}>
                   {
                     mutation => (
                       getUserId() && like &&
