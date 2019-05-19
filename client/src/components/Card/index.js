@@ -31,9 +31,6 @@ const Card = ({ post }) => {
       _isLiked();
     }, [post]);
 
-    //TODO: implement Optimistic UI
-    //TODO: update vote cache on mutation
-
     const _toggleLike = (like, mutation) => {
       mutation();
 
