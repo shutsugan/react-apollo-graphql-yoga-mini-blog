@@ -21,6 +21,7 @@ const Card = ({ post }) => {
     useEffect(_ => {
       const _isLiked = _ => {
         let liked = false;
+
         post.votes.forEach(vote => {
           if (vote.author.id === getUserId().userId) return liked = true;
         });
@@ -55,11 +56,13 @@ const Card = ({ post }) => {
         mutation();
     };
 
-    const _voted = data => console.log('=>', data);
-
-    const _displayError = error => setError('Something went wrong');
+    const _displayError = error => {
+      setError(error[0].message);
+      setError('Something went wrong');
+    }
 
     return (
+      getUserId().userId === post.author.id &&
         <div className="card flex flex-column mrb-16">
             <div className="card__art full relative">
                 <img
@@ -90,7 +93,6 @@ const Card = ({ post }) => {
                     }}>
                     {
                         mutation => (
-                            getUserId() &&
                             <span
                                 className="delete-icon flex center absolute top-right"
                                 onClick={event => _deleted(event, mutation)}>
@@ -101,9 +103,7 @@ const Card = ({ post }) => {
                 </Mutation>
 
             </div>
-            <h2 className="card__title pd-6-16 pdt-16 mr-none">
-                {post.title}
-            </h2>
+            <h2 className="card__title pd-6-16 pdt-16 mr-none">{post.title}</h2>
             <div
                 className="card__article pd-6-16 pdb-16"
                 dangerouslySetInnerHTML={{__html: _articlePreview(post.article)}}>
@@ -118,7 +118,6 @@ const Card = ({ post }) => {
                 <Mutation
                   mutation={VOTE_MUTATION}
                   variables={{ post: post.id, author: getUserId().userId }}
-                  onCompleted={_voted}
                   onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
                   update={(store, {data: { createVote } }) => {
                     const variables = { skip: 0, limit: 10, published: true };
@@ -142,7 +141,7 @@ const Card = ({ post }) => {
                   }}>
                   {
                     mutation => (
-                      getUserId() && !like &&
+                      !like &&
                       <img
                         className="icon icon__like"
                         onClick={_ => _toggleLike(true, mutation)}
@@ -155,7 +154,6 @@ const Card = ({ post }) => {
                 <Mutation
                   mutation={DELETE_VOTE_MUTATION}
                   variables={{ post: post.id, author: getUserId().userId }}
-                  onCompleted={_voted}
                   onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
                   update={(store, { data: { deleteVote } }) => {
                     const variables = { skip: 0, limit: 10, published: true };
@@ -178,7 +176,7 @@ const Card = ({ post }) => {
                   }}>
                   {
                     mutation => (
-                      getUserId() && like &&
+                      like &&
                       <img
                         className="icon icon__like"
                         onClick={_ => _toggleLike(false, mutation)}
