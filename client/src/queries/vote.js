@@ -16,18 +16,9 @@ export const VOTE_QUERY = gql`
 export const VOTE_MUTATION = gql`
   mutation VoteMutation($post: String!, $author: String!) {
     createVote(post: $post, author: $author) {
+      id
       post {
         id
-        title
-        article
-        art
-        draft
-        createdAt
-      }
-      author {
-        id
-        name
-        email
       }
     }
   }
