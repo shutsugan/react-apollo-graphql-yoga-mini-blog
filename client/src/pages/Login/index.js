@@ -14,27 +14,31 @@ const Login = ({ history }) => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    
+
     const _confirm = data => {
         const { token } = data.login;
         _saveUser(token);
-        
+
         goBack(history, '/');
     };
-    
+
+    const _displayError = error => {
+      setError(error[0].message);
+      setError('Something went wrong');
+    };
+
     const _saveUser = token => setToken(token);
-    const _displayError = error => setError(error[0].message);
 
     if (getToken()) return goBack(history, '/');
 
     return (
         <div className="login full-height flex flex-column center">
             <div className="half pd-16">
-                <FormHead 
-                    title="Login" 
+                <FormHead
+                    title="Login"
                     subTitle="Enter your details below."
                 />
-                
+
                 <Field
                     name="email"
                     type="email"
@@ -46,7 +50,7 @@ const Login = ({ history }) => {
                     placeholder="Personal Email"
                 />
 
-                <Field 
+                <Field
                     name="password"
                     type="password"
                     required={true}
