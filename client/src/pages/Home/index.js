@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import Card from '../../components/Card';
 import Paginate from '../../components/Paginate';
+import Error from '../../components/Error';
 
 import { Query } from 'react-apollo';
 import { POSTS_QUERY } from '../../queries/post';
@@ -17,7 +18,7 @@ const Home = _ => {
           {
               ({ loading, error, data, subscribeToMore }) => {
                   if (loading) return <div>Loading...</div>;
-                  if (error) return <div>Error</div>;
+                  if (error) return <Error message={error} />;
                   if (count === 0) setCount(data.feed.count);
 
                   const list = data.feed.posts.map(post => (
@@ -26,9 +27,7 @@ const Home = _ => {
 
                   return (
                     <>
-                      <div className="grid pd-16">
-                        {list}
-                      </div>
+                      <div className="grid pd-16">{list}</div>
                       {
                         list.length < count &&
                         <Paginate
