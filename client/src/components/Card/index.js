@@ -23,7 +23,9 @@ const Card = ({ post }) => {
         let liked = false;
 
         post.votes.forEach(vote => {
-          if (vote.author.id === getUserId().userId) return liked = true;
+          if (getUserId() && vote.author.id === getUserId().userId) {
+            return liked = true;
+          }
         });
 
         setLike(liked);
@@ -62,7 +64,6 @@ const Card = ({ post }) => {
     }
 
     return (
-      getUserId().userId === post.author.id &&
         <div className="card flex flex-column mrb-16">
             <div className="card__art full relative">
                 <img
@@ -70,7 +71,9 @@ const Card = ({ post }) => {
                     src={`http://localhost:4000/images/${post.art}`}
                     alt={post.title}
                 />
-                <Mutation
+                {
+                  getUserId() &&
+                  <Mutation
                     mutation={DELETE_POST_MUTATION}
                     variables={{ id: post.id, archive: true }}
                     onCompleted={_deleted}
@@ -101,7 +104,7 @@ const Card = ({ post }) => {
                         )
                     }
                 </Mutation>
-
+              }
             </div>
             <h2 className="card__title pd-6-16 pdt-16 mr-none">{post.title}</h2>
             <div
@@ -115,76 +118,82 @@ const Card = ({ post }) => {
                   Read More
                 </button>
 
-                <Mutation
-                  mutation={VOTE_MUTATION}
-                  variables={{ post: post.id, author: getUserId().userId }}
-                  onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
-                  update={(store, {data: { createVote } }) => {
-                    const variables = { skip: 0, limit: 10, published: true };
-                    const data = store.readQuery({
-                      query: POSTS_QUERY,
-                      variables
-                    });
+                {
+                  getUserId() &&
+                  <Mutation
+                    mutation={VOTE_MUTATION}
+                    variables={{ post: post.id, author: getUserId().userId }}
+                    onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
+                    update={(store, {data: { createVote } }) => {
+                      const variables = { skip: 0, limit: 10, published: true };
+                      const data = store.readQuery({
+                        query: POSTS_QUERY,
+                        variables
+                      });
 
-                    const { id } = createVote;
-                    const posts = data.feed.posts;
-                    data.feed.posts = posts.map(item => {
-                      if (item.id === post.id) item.votes = [id];
-                      return item;
-                    });
+                      const { id } = createVote;
+                      const posts = data.feed.posts;
+                      data.feed.posts = posts.map(item => {
+                        if (item.id === post.id) item.votes = [id];
+                        return item;
+                      });
 
-                    store.writeQuery({
-                      query: POSTS_QUERY,
-                      data,
-                      variables
-                    });
-                  }}>
-                  {
-                    mutation => (
-                      !like &&
-                      <img
-                        className="icon icon__like"
-                        onClick={_ => _toggleLike(true, mutation)}
-                        src={heartOutline} alt="unliked post"
-                      />
-                    )
-                  }
-                </Mutation>
+                      store.writeQuery({
+                        query: POSTS_QUERY,
+                        data,
+                        variables
+                      });
+                    }}>
+                    {
+                      mutation => (
+                        !like &&
+                        <img
+                          className="icon icon__like"
+                          onClick={_ => _toggleLike(true, mutation)}
+                          src={heartOutline} alt="unliked post"
+                        />
+                      )
+                    }
+                  </Mutation>
+                }
 
-                <Mutation
-                  mutation={DELETE_VOTE_MUTATION}
-                  variables={{ post: post.id, author: getUserId().userId }}
-                  onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
-                  update={(store, { data: { deleteVote } }) => {
-                    const variables = { skip: 0, limit: 10, published: true };
-                    const data = store.readQuery({
-                      query: POSTS_QUERY,
-                      variables
-                    });
+                {
+                  getUserId() &&
+                  <Mutation
+                    mutation={DELETE_VOTE_MUTATION}
+                    variables={{ post: post.id, author: getUserId().userId }}
+                    onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
+                    update={(store, { data: { deleteVote } }) => {
+                      const variables = { skip: 0, limit: 10, published: true };
+                      const data = store.readQuery({
+                        query: POSTS_QUERY,
+                        variables
+                      });
 
-                    const posts = data.feed.posts;
-                    data.feed.posts = posts.map(item => {
-                      if (item.id === post.id) item.votes = [];
-                      return item;
-                    });
+                      const posts = data.feed.posts;
+                      data.feed.posts = posts.map(item => {
+                        if (item.id === post.id) item.votes = [];
+                        return item;
+                      });
 
-                    store.writeQuery({
-                      query: POSTS_QUERY,
-                      data,
-                      variables
-                    });
-                  }}>
-                  {
-                    mutation => (
-                      like &&
-                      <img
-                        className="icon icon__like"
-                        onClick={_ => _toggleLike(false, mutation)}
-                        src={heartFilled} alt="liked post"
-                      />
-                    )
-                  }
-                </Mutation>
+                      store.writeQuery({
+                        query: POSTS_QUERY,
+                        data,
+                        variables
+                      });
+                    }}>
+                    {
+                      mutation => (
+                        like &&
+                        <img
+                          className="icon icon__like"
+                          onClick={_ => _toggleLike(false, mutation)}
+                          src={heartFilled} alt="liked post"
+                        />
+                      )
+                    }
+                  </Mutation>
+                }
             </div>
 
             {modal && <Modal post={modal} setter={setModal} />}
