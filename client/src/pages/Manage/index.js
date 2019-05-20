@@ -5,6 +5,7 @@ import Paginate from '../../components/Paginate';
 
 import { Query } from 'react-apollo';
 import { POSTS_QUERY } from '../../queries/post';
+import { getUserId } from '../../utils';
 
 const Manage = _ => {
   const [skip, setSkip] = useState(0);
@@ -19,8 +20,10 @@ const Manage = _ => {
                 if (loading) return <div>Loading...</div>;
                 if (error) return <div>Error</div>;
                 if (count === 0) setCount(data.feed.count);
+                if (!getUserId()) return;
 
                 const list = data.feed.posts.map(post => (
+                    getUserId().userId === post.author.id &&
                     <Card key={post.id} post={post} />
                 ));
 
