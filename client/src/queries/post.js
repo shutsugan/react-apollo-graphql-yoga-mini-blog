@@ -53,6 +53,11 @@ export const CREATE_POST_MUTATION = gql`
                 name
                 email
             }
+            votes {
+              author {
+                id
+              }
+            }
         }
     }
 `;
@@ -70,6 +75,11 @@ export const UPDATE_POST_MUTATION = gql`
                 id
                 name
                 email
+            }
+            votes {
+              author {
+                id
+              }
             }
         }
     }
