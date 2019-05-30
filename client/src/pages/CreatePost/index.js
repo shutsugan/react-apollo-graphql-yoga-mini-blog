@@ -10,7 +10,7 @@ import Editor from '../../components/Editor';
 import Error from '../../components/Error';
 
 import { CREATE_POST_MUTATION, POSTS_QUERY } from '../../queries/post';
-import { getUserId, goBack } from '../../utils';
+import { getUserId, goBack, displayError } from '../../utils';
 
 const CreatePost = ({ history }) => {
     const [title, setTitle] = useState('');
@@ -24,10 +24,6 @@ const CreatePost = ({ history }) => {
     const { userId } = getUserId();
 
     const _confirm = _ => goBack(history, '/');
-    const _displayError = error => {
-      if (error) setError(error[0].message);
-      else setError('Something is wrong, try later');
-    };
 
     return (
         <div className="login full-height flex flex-column center">
@@ -68,7 +64,7 @@ const CreatePost = ({ history }) => {
                     mutation={CREATE_POST_MUTATION}
                     variables={{ title, article, art, draft, author: userId }}
                     onCompleted={_confirm}
-                    onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
+                    onError={({ graphQLErrors }) => displayError(graphQLErrors, setError)}
                     update={(store, { data: { createPost } }) => {
                       const variables = { skip: 0, limit: 10, published: true };
                       const data = store.readQuery({
@@ -96,8 +92,8 @@ const CreatePost = ({ history }) => {
 
                 <PageSwitcher
                     to="/"
-                    label="Home"
                     text="Go back to "
+                    label="Home"
                 />
             </div>
 
