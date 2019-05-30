@@ -10,7 +10,7 @@ import Editor from '../../components/Editor';
 import Error from '../../components/Error';
 
 import { POST_QUERY, POSTS_QUERY, UPDATE_POST_MUTATION } from '../../queries/post';
-import { getUserId, goBack } from '../../utils';
+import { getUserId, goBack, displayError } from '../../utils';
 
 const UpdatePost = ({ history, match, client }) => {
     const { id } = match.params;
@@ -42,10 +42,6 @@ const UpdatePost = ({ history, match, client }) => {
     if (!getUserId()) return goBack(history, '/');
 
     const _confirm = _ => goBack(history, '/');
-    const _displayError = error => {
-      if (error) setError(error[0].message);
-      else setError('Something is wrong, try later');
-    };
 
     return (
         <div className="login full-height flex flex-column center">
@@ -87,7 +83,7 @@ const UpdatePost = ({ history, match, client }) => {
                     mutation={UPDATE_POST_MUTATION}
                     variables={{ id, title, article, art, draft }}
                     onCompleted={_confirm}
-                    onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
+                    onError={({ graphQLErrors }) => displayError(graphQLErrors, setError)}
                     update={(store, { data: { updatePost } }) => {
                       const variables = { skip: 0, limit: 10, published: true };
                       const data = store.readQuery({
@@ -121,8 +117,8 @@ const UpdatePost = ({ history, match, client }) => {
 
                 <PageSwitcher
                     to="/"
-                    label="Home"
                     text="Go back to "
+                    label="Home"
                 />
             </div>
 

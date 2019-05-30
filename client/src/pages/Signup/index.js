@@ -7,7 +7,7 @@ import PageSwitcher from '../../components/PageSwitcher';
 import Error from '../../components/Error';
 
 import { SIGNUP_MUTATION } from '../../queries/signup';
-import { goBack, setToken, getToken } from '../../utils';
+import { goBack, setToken, getToken, displayError } from '../../utils';
 
 const Signup = ({ history }) => {
     const [name, setName] = useState('');
@@ -15,15 +15,13 @@ const Signup = ({ history }) => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
+    const _saveUser = token => setToken(token);
     const _confirm = data => {
         const { token } = data.signup;
         _saveUser(token);
 
         goBack(history, '/');
     };
-
-    const _saveUser = token => setToken(token);
-    const _displayError = error => setError(error[0].message);
 
     if (getToken()) return goBack(history, '/');
 
@@ -55,7 +53,7 @@ const Signup = ({ history }) => {
                     placeholder="Personal Email"
                 />
 
-                <Field 
+                <Field
                     name="password"
                     type="password"
                     required={true}
@@ -68,7 +66,7 @@ const Signup = ({ history }) => {
                     mutation={SIGNUP_MUTATION}
                     variables={{name, email, password}}
                     onCompleted={data => _confirm(data)}
-                    onError={({graphQLErrors}) => _displayError(graphQLErrors)}>
+                    onError={({graphQLErrors}) => displayError(graphQLErrors, setError)}>
                     {
                         mutation => (
                             <button
@@ -82,8 +80,8 @@ const Signup = ({ history }) => {
 
                 <PageSwitcher
                     to="/login"
-                    label="Login"
                     text="Don't have an account! "
+                    label="Login"
                 />
             </div>
 
