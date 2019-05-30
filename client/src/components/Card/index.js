@@ -3,7 +3,7 @@ import { Mutation } from 'react-apollo';
 
 import { DELETE_POST_MUTATION, POSTS_QUERY } from '../../queries/post';
 import { VOTE_MUTATION, DELETE_VOTE_MUTATION } from '../../queries/vote';
-import { getUserId } from '../../utils';
+import { getUserId, displayError } from '../../utils';
 
 import Modal from '../../components/Modal';
 import Error from '../../components/Error';
@@ -58,11 +58,6 @@ const Card = ({ post }) => {
         mutation();
     };
 
-    const _displayError = error => {
-      setError(error[0].message);
-      setError('Something went wrong');
-    }
-
     return (
         <div className="card flex flex-column mrb-16">
             <div className="card__art full relative">
@@ -77,7 +72,7 @@ const Card = ({ post }) => {
                     mutation={DELETE_POST_MUTATION}
                     variables={{ id: post.id, archive: true }}
                     onCompleted={_deleted}
-                    onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
+                    onError={({ graphQLErrors }) => displayError(graphQLErrors, setError)}
                     update={(store, { data: { deletePost } }) => {
                       const variables = { skip: 0, limit: 10, published: true };
                       const data = store.readQuery({
@@ -123,7 +118,7 @@ const Card = ({ post }) => {
                   <Mutation
                     mutation={VOTE_MUTATION}
                     variables={{ post: post.id, author: getUserId().userId }}
-                    onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
+                    onError={({ graphQLErrors }) => displayError(graphQLErrors, setError)}
                     update={(store, {data: { createVote } }) => {
                       const variables = { skip: 0, limit: 10, published: true };
                       const data = store.readQuery({
@@ -162,7 +157,7 @@ const Card = ({ post }) => {
                   <Mutation
                     mutation={DELETE_VOTE_MUTATION}
                     variables={{ post: post.id, author: getUserId().userId }}
-                    onError={({ graphQLErrors }) => _displayError(graphQLErrors)}
+                    onError={({ graphQLErrors }) => displayError(graphQLErrors, setError)}
                     update={(store, { data: { deleteVote } }) => {
                       const variables = { skip: 0, limit: 10, published: true };
                       const data = store.readQuery({
