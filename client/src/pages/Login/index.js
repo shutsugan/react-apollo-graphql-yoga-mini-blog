@@ -7,27 +7,20 @@ import FormHead from '../../components/FormHead';
 import PageSwitcher from '../../components/PageSwitcher';
 
 import { LOGIN_MUTATION } from '../../queries/login';
-import { goBack, setToken, getToken } from '../../utils';
+import { goBack, setToken, getToken, displayError } from '../../utils';
 
 const Login = ({ history }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-
+    const _saveUser = token => setToken(token);
     const _confirm = data => {
         const { token } = data.login;
         _saveUser(token);
 
         goBack(history, '/');
     };
-
-    const _displayError = error => {
-      setError(error[0].message);
-      setError('Something went wrong');
-    };
-
-    const _saveUser = token => setToken(token);
 
     if (getToken()) return goBack(history, '/');
 
@@ -63,7 +56,7 @@ const Login = ({ history }) => {
                     mutation={LOGIN_MUTATION}
                     variables={{ email, password }}
                     onCompleted={data => _confirm(data)}
-                    onError={({ graphQLErrors }) => _displayError(graphQLErrors)}>
+                    onError={({ graphQLErrors }) => displayError(graphQLErrors, setError)}>
                     {
                         mutation => (
                             <button
@@ -77,8 +70,8 @@ const Login = ({ history }) => {
 
                 <PageSwitcher
                     to="/signup"
-                    label="Signup"
                     text="If new user! "
+                    label="Signup"
                 />
             </div>
 
