@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import Card from '../../components/Card';
 import Paginate from '../../components/Paginate';
+import Error from '../../components/Error';
+import ShimmerLoader from '../../components/ShimmerLoader';
 
 import { Query } from 'react-apollo';
 import { POSTS_QUERY } from '../../queries/post';
@@ -17,8 +19,8 @@ const Manage = _ => {
       variables={{ skip, limit: 10, published: false }}>
         {
             ({ loading, error, data, subscribeToMore }) => {
-                if (loading) return <div>Loading...</div>;
-                if (error) return <div>Error</div>;
+                if (loading) return <ShimmerLoader />;
+                if (error) return <Error error={error} />;
                 if (count === 0) setCount(data.feed.count);
                 if (!getUserId()) return;
 
@@ -29,9 +31,7 @@ const Manage = _ => {
 
                 return (
                   <>
-                    <div className="grid pd-16">
-                      {list}
-                    </div>
+                    <div className="grid pd-16">{list}</div>
                     {
                       list.length < count &&
                       <Paginate
