@@ -1,11 +1,15 @@
 .shimmer__container {
-  
+
 }
 
 .shimmer__art {
   height: 150px;
   overflow: hidden;
   border-bottom: solid .5px var(--border);
+}
+
+.shimmer__info {
+  background: #fff;
 }
 
 .shimmer__title {
