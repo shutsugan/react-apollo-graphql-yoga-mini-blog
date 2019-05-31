@@ -59,7 +59,7 @@ const Card = ({ post }) => {
     };
 
     return (
-        <div className="card flex flex-column mrb-16">
+        <div className="card shadow flex flex-column mrb-16">
             <div className="card__art full relative">
                 <img
                     className="full"
