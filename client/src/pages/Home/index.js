@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Card from '../../components/Card';
 import Paginate from '../../components/Paginate';
 import Error from '../../components/Error';
+import ShimmerLoader from '../../components/ShimmerLoader';
 
 import { Query } from 'react-apollo';
 import { POSTS_QUERY } from '../../queries/post';
@@ -17,7 +18,7 @@ const Home = _ => {
         variables={{ skip, limit: 10, published: true }}>
           {
               ({ loading, error, data, subscribeToMore }) => {
-                  if (loading) return <div>Loading...</div>;
+                  if (loading) return <ShimmerLoader />;
                   if (error) return <Error message={error} />;
                   if (count === 0) setCount(data.feed.count);
 
