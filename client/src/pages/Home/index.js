@@ -19,7 +19,7 @@ const Home = _ => {
           {
               ({ loading, error, data, subscribeToMore }) => {
                   if (loading) return <ShimmerLoader />;
-                  if (error) return <Error message={error} />;
+                  if (error) return <Error error={error} />;
                   if (count === 0) setCount(data.feed.count);
 
                   const list = data.feed.posts.map(post => (
