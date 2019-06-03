@@ -4,8 +4,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Head from '../Head';
 import Loader from '../Loader';
 
-import './index.css';
-
 const pages = ['Home', 'Signup', 'Login', 'CreatePost', 'UpdatePost', 'Manage'];
 const [
   Home, Signup, Login, CreatePost, UpdatePost, Manage
