@@ -1,7 +1,3 @@
-.shimmer__container {
-
-}
-
 .shimmer__art {
   height: 150px;
   overflow: hidden;
@@ -24,10 +20,10 @@
 
 @keyframes placeHolderShimmer{
   0%{
-      background-position: -454px 0
+    background-position: -454px 0
   }
   100%{
-      background-position: 454px 0
+    background-position: 454px 0
   }
 }
 
