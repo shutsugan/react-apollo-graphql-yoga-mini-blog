@@ -22,7 +22,7 @@ const Modal = ({ post, setter }) => (
     <div className="modal__post flex flex-column pd-16">
       <div>
         {
-          getUserId().userId && post.author.id &&
+          getUserId() && getUserId().userId && post.author.id &&
           <Link className="link" to={`/update/${post.id}`}>Edit post</Link>
         }
         <h2 className="modal__title mr-none mrb-16">{post.title}</h2>
