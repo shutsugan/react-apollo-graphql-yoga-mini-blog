@@ -54,19 +54,9 @@ const client = new ApolloClient({
 
 const root = document.querySelector ('#root');
 if (root.hasChildNodes()) {
-  hydrate(
-      <ApolloProvider client={client}>
-          <App />
-      </ApolloProvider>,
-      root
-  );
+  hydrate(<ApolloProvider client={client}><App /></ApolloProvider>, root);
 } else {
-  render(
-      <ApolloProvider client={client}>
-          <App />
-      </ApolloProvider>,
-      root
-  );
+  render(<ApolloProvider client={client}><App /></ApolloProvider>, root);
 }
 
 serviceWorker.unregister();
