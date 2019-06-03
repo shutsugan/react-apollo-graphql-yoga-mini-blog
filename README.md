@@ -1,4 +1,4 @@
-#Graphql-yoga-blog
+# Graphql-yoga-blog
 
 ReactJs & GraphqlYoga mini blog
 
